@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripAdvisor Clone</title>
+    <style>
+        /* CSS Reset & Variables */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        :root {
+            --primary-green: #34e0a1;
+            --dark-green: #00aa6c;
+            --text-dark: #000000;
+            --text-light: #4a4a4a;
+            --bg-light: #f2f2f2;
+            --white: #ffffff;
+        }
+
+        body {
+            background-color: var(--white);
+            color: var(--text-dark);
+        }
+
+        /* 1. Header Layout */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background-color: var(--white);
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--text-dark);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            background-color: var(--primary-green);
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: inline-block;
+        }
+
+        /* 2. Navigation Menu */
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: var(--bg-light);
+            color: var(--dark-green);
+        }
+
+        /* 3. Search Section (Hero) */
+        .hero-search {
+            text-align: center;
+            padding: 4rem 5%;
+            background-color: var(--bg-light);
+        }
+
+        .hero-search h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: 30px;
+            padding: 0.5rem;
+            display: flex;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .search-container input {
+            flex: 1;
+            border: none;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            outline: none;
+        }
+
+        .search-container button {
+            background-color: var(--primary-green);
+            color: var(--text-dark);
+            border: none;
+            padding: 0 2rem;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .search-container button:hover {
+            background-color: var(--dark-green);
+            color: var(--white);
+        }
+
+        .filters {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .filters select {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            background: var(--white);
+            cursor: pointer;
+        }
+
+        /* 4. Main Content Area (CSS Grid) */
+        main {
+            padding: 4rem 5%;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        /* 5. Card Layout */
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 1.2rem;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-rating {
+            color: var(--dark-green);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .card-rating span {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .card-desc {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--bg-light);
+            padding: 3rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        footer p {
+            color: var(--text-light);
+        }
+
+        /* 6. Responsiveness (Media Queries) */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            .hero-search h1 {
+                font-size: 2rem;
+            }
+
+            .search-container {
+                flex-direction: column;
+                border-radius: 12px;
+                background: transparent;
+                box-shadow: none;
+            }
+
+            .search-container input {
+                border-radius: 12px;
+                margin-bottom: 10px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            }
+
+            .search-container button {
+                padding: 1rem;
+                border-radius: 12px;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation Menu -->
+    <header>
+        <a href="#" class="logo">
+            <span class="logo-icon"></span> Tripadvisor
+        </a>
+        <nav>
+            <ul>
+                <li><a href="#">Hotels</a></li>
+                <li><a href="#">Things to Do</a></li>
+                <li><a href="#">Restaurants</a></li>
+                <li><a href="#">Flights</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Search Section -->
+    <div class="hero-search">
+        <h1>Where to?</h1>
+        <div class="search-container">
+            <input type="text" placeholder="Places to go, things to do, hotels...">
+            <button>Search</button>
+        </div>
+        <div class="filters">
+            <select>
+                <option>Any Price</option>
+                <option>Under RM 200</option>
+                <option>RM 200 - RM 500</option>
+                <option>RM 500+</option>
+            </select>
+            <select>
+                <option>Any Rating</option>
+                <option>4+ Stars</option>
+                <option>5 Stars</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <!-- Main Content Area -->
+   <!-- Main Content Area -->
+    <main>
+        <!-- Featured Destinations -->
+        <h2 class="section-title">Featured Destinations</h2>
+        <div class="grid-container">
+            <!-- Card 1: Kuala Lumpur -->
+            <div class="card">
+                <img src="images/kl.jpg" alt="Kuala Lumpur">
+                <div class="card-content">
+                    <div class="card-title">Kuala Lumpur</div>
+                    <div class="card-rating">
+                        ★★★★★ <span>(12,453 reviews)</span>
+                    </div>
+                    <div class="card-desc">Experience the iconic Petronas Towers and vibrant street food scene.</div>
+                </div>
+            </div>
+            <!-- Card 2: Penang -->
+            <div class="card">
+                <img src="images/penang street art.jpg" alt="Penang">
+                <div class="card-content">
+                    <div class="card-title">George Town, Penang</div>
+                    <div class="card-rating">
+                        ★★★★☆ <span>(8,932 reviews)</span>
+                    </div>
+                    <div class="card-desc">A UNESCO World Heritage site known for its rich history and culinary delights.</div>
+                </div>
+            </div>
+            <!-- Card 3: Langkawi -->
+            <div class="card">
+                <img src="images/prsitine beach.jpg" alt="Langkawi">
+                <div class="card-content">
+                    <div class="card-title">Langkawi Island</div>
+                    <div class="card-rating">
+                        ★★★★★ <span>(10,120 reviews)</span>
+                    </div>
+                    <div class="card-desc">Pristine beaches, luxury resorts, and duty-free shopping await.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popular Hotels -->
+        <h2 class="section-title">Popular Hotels</h2>
+        <div class="grid-container">
+            <!-- Hotel 1 -->
+            <div class="card">
+                <img src="images/luxury hotel.jpg" alt="Luxury Hotel">
+                <div class="card-content">
+                    <div class="card-title">The Grand Resort & Spa</div>
+                    <div class="card-rating">
+                        ★★★★★ <span>(4,210 reviews)</span>
+                    </div>
+                    <div class="card-desc">RM 450/night • Beachfront • Free Breakfast</div>
+                </div>
+            </div>
+            <!-- Hotel 2 (Boutique Inn) -->
+            <div class="card">
+                <img src="images/herritage interior.jpg" alt="Boutique Hotel">
+                <div class="card-content">
+                    <div class="card-title">Heritage Boutique Inn</div>
+                    <div class="card-rating">
+                        ★★★★☆ <span>(2,105 reviews)</span>
+                    </div>
+                    <div class="card-desc">RM 220/night • City Center • Historical</div>
+                </div>
+            </div>
+            <!-- Hotel 3 -->
+            <div class="card">
+                <img src="images/wooden cabin.jpg" alt="Resort">
+                <div class="card-content">
+                    <div class="card-title">Rainforest Eco Lodge</div>
+                    <div class="card-rating">
+                        ★★★★★ <span>(3,890 reviews)</span>
+                    </div>
+                    <div class="card-desc">RM 310/night • Nature • Sustainable</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">
+            <a href="#" class="logo" style="font-size: 1.2rem;">
+                <span class="logo-icon" style="width: 20px; height: 20px;"></span> Tripadvisor
+            </a>
+        </div>
+        <p>&copy; 2026 Tripadvisor Clone. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="#" style="color: var(--text-light); text-decoration: none; margin-left: 1rem;">Terms</a>
+            <a href="#" style="color: var(--text-light); text-decoration: none; margin-left: 1rem;">Privacy</a>
+        </div>
+    </footer>
+
+</body>
+</html>
